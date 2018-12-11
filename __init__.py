@@ -2,7 +2,7 @@ bl_info = {
    "name": "Useful Menus Add-on",
    "author": "Alan North",
    "version": (0, 2),
-   "blender": (2, 79, 0),
+   'blender': (2, 80, 0),
    "location": "None, see documentation to set shortcuts.",
    "description": "Lists sculpt brushes (sculpt.list_brushes).",
    "warning": "",
@@ -110,7 +110,6 @@ class MenuBrushList(bpy.types.Operator):
                   break
                #for each row
                for index in range(col_index*row_num, col_index*row_num + row_num):
-
                   name = brush_names[index]
                   default_icon = "BRUSH_"+brush_types[index]
                   if default_icon == "BRUSH_DRAW": #why!!!
@@ -121,18 +120,19 @@ class MenuBrushList(bpy.types.Operator):
                   custom_icon_path = Path(bpy.data.brushes[name].icon_filepath).is_file()
                   #does the brush have a custom icon otherwise use default
                   if bpy.data.brushes[name].use_custom_icon and custom_icon_path:
-                     col.operator("useful_menus.private_brush_set", text = name, icon_value = custom_icon, emboss=False ).name = name
+                     col.operator("useful_menus.private_brush_set", text = name, icon_value = custom_icon, emboss=False )
                   else:
-                     col.operator("useful_menus.private_brush_set", text = name, icon = default_icon, emboss=False).name = name
+                     col.operator("useful_menus.private_brush_set", text = name, icon = default_icon, emboss=False)
                   #break if we're at the end
                   if index >= len(brush_names) - 1:
                      break
 
-def register():
-   bpy.utils.register_module(__name__)
+classes = (
+   BrushSet,
+   MenuBrushList,
+)
 
-def unregister():
-   bpy.utils.unregister_module(__name__)
+register, unregister = bpy.utils.register_classes_factory(classes)
 
 if __name__ == "__main__":
    register()
